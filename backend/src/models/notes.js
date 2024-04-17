@@ -104,7 +104,31 @@ const notesSchema = mongoose.Schema({
     },
 
     education : [
+        {
 
+        name : {type : String ,  required : true , default : " "},
+
+    institutename : { type : String ,
+        required : true ,
+    default : " "},
+
+    educationtype : { type : String ,
+        required : true ,
+    default : " "},
+
+    yearofgradutation : { type : String ,
+        required : true ,
+    default : " "},
+
+    degree : { type : String ,
+        required : true ,
+    default : " "},
+
+    description : { type : String ,
+        required : true ,
+    default : " "}
+    
+    }
     ],
 
     project : [
