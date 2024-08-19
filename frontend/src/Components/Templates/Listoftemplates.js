@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Template2 from "./Template2"
-import Template1 from "./Template1";
+import Template2 from "./Template2/Template2"
+import Template1 from "./Template1/Template1";
 import { useLocation } from 'react-router-dom';
 
 import dataContext from "../../context/datacontext";

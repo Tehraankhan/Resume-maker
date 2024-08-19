@@ -1,3 +1,4 @@
+const { json } = require("express");
 const notes = require("../models/notes");
 const noteModel = require("../models/notes")
 
@@ -27,21 +28,51 @@ const firstentry = async (req, res) => {
 
 const creatNote = async (req, res) => {
 
-    const { name, email , contact, linkedin } = req.body
     
-    console.log(name)
-    
-
+   
     const newnote = new noteModel({
 
-    personal:{
+        personal:{
 
-        name: name || " ",
-        email: email || " ",
-        contact:contact || " ",
-        linkedin:linkedin || " ",
-        
-    },
+            name: {
+                text:" " ,
+                formatting:{
+                 bold: true,
+                 italic: false,
+                 underline: false
+                }
+    
+           },
+            email: {
+                text:" ",
+                formatting:{
+                    bold: true,
+                 italic: false,
+                 underline: false
+    
+                }
+            },
+            contact:{
+                text:" ",
+                formatting:{
+                    bold: true,
+                 italic: false,
+                 underline: false
+    
+                },
+    
+            },
+            linkedin:{
+                text:" ",
+                formatting:{
+                    bold: true,
+                 italic: false,
+                 underline: false
+    
+                },
+            }
+            
+        },
      
       userId: req.userId, 
       
@@ -68,17 +99,26 @@ const updateNote = async (req, res) => {
 
     const id = req.params.id;
      console.log(id)
+
+     console.log(req.body)
    
     const { name, email , contact, linkedin } = req.body
-    console.log(name)
-    const {project}= req.body
-    console.log(project)
+    const {text , formatting} = name
+    const {bold , italic , underline}=formatting
 
     const newnote = {
 
         personal:{
 
-            name: name || " ",
+            name: {
+                   text:text || ' ',
+                   formatting:{
+                    bold: bold,
+                    italic: italic,
+                    underline: underline
+                   }
+
+              },
             email: email || " ",
             contact:contact || " ",
             linkedin:linkedin || " ",
@@ -135,11 +175,60 @@ const getNote = async (req, res) => {
 
 }
 
+const getHistory = async (req,res) =>{
+
+    try{
+
+        const data = await noteModel.find({userId:req.userId});
+        res.status(201).json(data)
+        
+   const historydata =  data.map((elem)=>{
+
+      return   {
+            selectedTemplate:elem.selectedtemplate,
+            firstcreated:elem.createdAt,
+            updated:elem.updatedAt
+            
+
+        };
+
+        
+      })
+
+      console.log(historydata)
+
+    }
+    catch{
+
+    }
+}
+
+
+
+const getselectedData = async (req,res) =>{
+   const id= req.params.id
+    try{
+        console.log("yes")
+
+        const data = await noteModel.find({_id:id});
+        
+         res.status(201).json(data)
+    
+     
+
+    }
+    catch{
+
+    }
+}
+
 module.exports = {
 
     creatNote,
     updateNote,
     deleteNote,
     getNote,
-    firstentry
+    firstentry,
+    getHistory,
+    getselectedData
 }
