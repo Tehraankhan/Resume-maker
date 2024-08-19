@@ -28,7 +28,7 @@ export default function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/user/signup",
+        "https://resume-maker-backend-13vv.onrender.com/user/signup",
         { username: username, password: password, email: email },
         {
           headers: {

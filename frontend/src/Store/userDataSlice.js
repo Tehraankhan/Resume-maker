@@ -1,6 +1,6 @@
 import axios from "axios";
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import { json } from "react-router-dom";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
 
 // Define initial state
 const initialState = {
@@ -55,7 +55,7 @@ export const fetchdata = createAsyncThunk("userData/fetchdata", async () => {
   console.log("yes");
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("http://localhost:5000/notes/", {
+    const response = await axios.get("https://resume-maker-backend-13vv.onrender.com/notes", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ export const fetchselecteddata = createAsyncThunk("selecteddata" , async(ID)=>{
 
         const token = localStorage.getItem("token")
        
-            const response = await axios.get( `http://localhost:5000/notes/${ID}`,
+            const response = await axios.get( `https://resume-maker-backend-13vv.onrender.com/${ID}`,
                       {
                           headers: {
                               'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export const entry = createAsyncThunk("entry/addentry", async () => {
    
 
     const response = await axios.post(
-      "http://localhost:5000/notes/",
+      "https://resume-maker-backend-13vv.onrender.com/",
       {},
       {
         headers: {
@@ -131,7 +131,7 @@ export const updatedata = createAsyncThunk(
      
 
         const response = await axios.put(
-            `http://localhost:5000/notes/${state.ID}`,
+            `https://resume-maker-backend-13vv.onrender.com/${state.ID}`,
             state.currentUerData.personal
                
             ,
@@ -142,6 +142,7 @@ export const updatedata = createAsyncThunk(
                 }
             }
         );
+        return response
 
       // initialState.currentUerData = response.data
     } catch (error) {

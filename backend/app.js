@@ -4,6 +4,8 @@ const notesNotes = require("../backend/src/Routes/notesRoutes")
 const mongoose = require("mongoose")
 const app = express()
 const dotenv = require("dotenv");
+
+
 const cors =require("cors")
 app.use(cors())
 app.use(express.json());
