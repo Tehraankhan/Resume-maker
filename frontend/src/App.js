@@ -14,6 +14,7 @@ import PrivteRoutes from './Components/PrivateRoutes';
 import { Provider } from 'react-redux';
 import Store from './Store/Store';
 import Template1Pdf from './Components/Templates/Template1/Template1Pdf';
+import Middlepage from './Components/Middlepage';
 
 
 
@@ -45,6 +46,7 @@ function App() {
           <Route exact path='/History' element={<History/>}/>
           <Route exact path='/Test' element={<Test/>}/>
           <Route exact path='/Template1Pdf' element={<Template1Pdf/>}/>
+          <Route exact path='/Middlepage' element={<Middlepage/>}/>
       
        
         

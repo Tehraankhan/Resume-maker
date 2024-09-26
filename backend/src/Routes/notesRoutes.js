@@ -4,12 +4,16 @@ const { getNote, creatNote, deleteNote, updateNote ,firstentry ,getHistory ,gets
 const notesRouter = express.Router();
 const auth = require("../middle/auth")
 
+
+notesRouter.delete("/delete/selecteddata/:id",auth,deleteNote)
+notesRouter.put("/:id",auth,updateNote);
+notesRouter.post("/",auth,creatNote);
 notesRouter.get("/",auth,getNote);
 notesRouter.get("/getHistory",auth,getHistory);
 notesRouter.get("/:id",auth,getselectedData);
 notesRouter.post("/",auth,creatNote);
 
-notesRouter.delete("/:id",auth,deleteNote)
-notesRouter.put("/:id",auth,updateNote);
+
+
 
 module.exports = notesRouter;

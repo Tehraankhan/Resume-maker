@@ -6,7 +6,7 @@ function Navbar() {
 
 
     return (<>
-        <div className=" flex flex-row  py-[10px] h-[70px]  text-[20px]  text-black bg-white sticky top-0 border-bottom border-[1px] ">
+        <div className=" flex flex-row  shadow-sm py-[10px] h-[70px]  text-[20px]  text-black bg-white  top-0 border-bottom border-[1px] ">
 
 
             <ul className=" w-[500px] flex flex-row justify-evenly ml-[60px]    pt-[7px]">

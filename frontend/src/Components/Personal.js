@@ -92,18 +92,12 @@ export default function Personal({ next, currentfocus }) {
 
   return (
     <>
-      <div className="flex flex-col my-[40px] mx-[auto] w-[623px] h-[800px] overflow-y-auto flex-shrink-0 no-scrollbar">
-        <h1 className="text-[40px] mx-[auto] bg-gradient-to-r from-blue-600 to-indigo-400 inline-block text-transparent bg-clip-text">
+      <div className="flex flex-col shadow-2xl mt-[20px] mx-auto w-[95%] h-full bg-[white] rounded-[10px] ">
+        <h1 className="text-[40px] mx-[auto] mt-[10px]">
           Personal Details
         </h1>
-        <div className="flex flex-row w-full h-[100px] mt-[30px] bg-[#1b1fab0f]">
-          <i className="fa-solid fa-address-card text-[70px] ml-[20px] mt-[10px] mr-[20px]"></i>
-          <div className="flex flex-col">
-            <h1 className="text-[25px] ml-[10px]">Add your Personal Details</h1>
-            <p className="ml-[10px]">Adding personal details along with LinkedIn helps reviewers view your profile perfectly</p>
-          </div>
-        </div>
-        <div className="flex flex-row mt-[40px]">
+        
+        <div className="flex flex-row mt-[40px] mx-auto">
           <div className="flex flex-col">
             <label>Full Name</label>
             <input
@@ -129,7 +123,7 @@ export default function Personal({ next, currentfocus }) {
             />
           </div>
         </div>
-        <div className="flex flex-row mt-[40px]">
+        <div className="flex flex-row mt-[40px] mx-auto">
           <div className="flex flex-col">
             <label>Contact Number</label>
             <input

@@ -20,6 +20,7 @@ export default function Signin() {
         
       }
 
+      const url = "http://localhost:5000"
       
 
     const fetchData = async () => {
@@ -27,7 +28,7 @@ export default function Signin() {
 
         try {
           const response = await axios.post(
-            "https://resume-maker-backend-13vv.onrender.com/user/signin",
+            "http://localhost:5000/user/signin",
             {  email: email , password: password},
             {
               headers: {

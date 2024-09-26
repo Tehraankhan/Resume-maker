@@ -27,7 +27,7 @@ const firstentry = async (req, res) => {
 }
 
 const creatNote = async (req, res) => {
-
+  console.log("yes")
     
    
     const newnote = new noteModel({
@@ -73,6 +73,8 @@ const creatNote = async (req, res) => {
             }
             
         },
+        education:[],
+        project:[],
      
       userId: req.userId, 
       
@@ -98,11 +100,13 @@ const creatNote = async (req, res) => {
 const updateNote = async (req, res) => {
 
     const id = req.params.id;
-     console.log(id)
+    
 
-     console.log(req.body)
    
-    const { name, email , contact, linkedin } = req.body
+   
+    const {personal ,education, project} = req.body
+   
+    const { name, email , contact, linkedin } = personal
     const {text , formatting} = name
     const {bold , italic , underline}=formatting
 
@@ -124,6 +128,8 @@ const updateNote = async (req, res) => {
             linkedin:linkedin || " ",
             
         },
+        education:education,
+        project:project,
          
           userId: req.userId, 
     }
@@ -132,6 +138,7 @@ const updateNote = async (req, res) => {
 
     try {
         await noteModel.findByIdAndUpdate(id, newnote, { new: true });
+        console.log(newnote.education)
         res.status(200).json(newnote)
         console.log("yess")
 
@@ -145,7 +152,7 @@ const updateNote = async (req, res) => {
 const deleteNote = async (req, res) => {
 
     const id = req.params.id;
-    console.log(id)
+    console.log("dkd")
 
     try {
         const note= await noteModel.findByIdAndDelete({_id:id});
@@ -159,11 +166,12 @@ const deleteNote = async (req, res) => {
 }
 
 const getNote = async (req, res) => {
-
+console.log("yes")
 
     try {
 
         const notes = await noteModel.find({ userId: req.userId });
+        console.log(notes)
         res.status(201).json(notes);
 
 

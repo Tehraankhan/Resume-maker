@@ -1,61 +1,63 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import Education from "../Components/Education";
 
-
+const url = "https://resume-maker-backend-13vv.onrender.com";
 // Define initial state
 const initialState = {
   datalist: [],
   response: "",
   error: "",
   updateState: false,
-  ID:'',
+  ID: "",
   currentUerData: {
-    personal:{
+    personal: {
+      name: {
+        text: "",
+        formatting: {
+          bold: "",
+          italic: "",
+          underline: "",
+        },
+      },
 
-       name: {
-      text: "",
-      formatting: {
-        bold: "",
-        italic: "",
-        underline: "",
+      linkedin: {
+        text: "",
+        formatting: {
+          bold: "",
+          italic: "",
+          underline: "",
+        },
+      },
+      contact: {
+        text: "",
+        formatting: {
+          bold: "",
+          italic: "",
+          underline: "",
+        },
+      },
+      email: {
+        text: "",
+        formatting: {
+          bold: "",
+          italic: "",
+          underline: "",
+        },
       },
     },
 
-    linkedin: {
-      text: "",
-      formatting: {
-        bold: "",
-        italic: "",
-        underline: "",
-      },
-    },
-    contact: {
-      text: "",
-      formatting: {
-        bold: "",
-        italic: "",
-        underline: "",
-      },
-    },
-    email: {
-      text: "",
-      formatting: {
-        bold: "",
-        italic: "",
-        underline: "",
-      },
-    },
-    }
-   
+    education: [],
+    project: [],
   },
 };
 
 // Create an async thunk for fetching data
 export const fetchdata = createAsyncThunk("userData/fetchdata", async () => {
-  console.log("yes");
+  console.log("yess");
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("https://resume-maker-backend-13vv.onrender.com/notes", {
+    const response = await axios.get("http://localhost:5000/notes/", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -67,42 +69,62 @@ export const fetchdata = createAsyncThunk("userData/fetchdata", async () => {
   }
 });
 
+export const fetchselecteddata = createAsyncThunk(
+  "selecteddata",
+  async (ID) => {
+    console.log(ID);
 
-export const fetchselecteddata = createAsyncThunk("selecteddata" , async(ID)=>{
+    try {
+      const token = localStorage.getItem("token");
 
-    console.log(ID)
+      const response = await axios.get(`http://localhost:5000/notes/${ID}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    try{
-                  
-
-        const token = localStorage.getItem("token")
-       
-            const response = await axios.get( `https://resume-maker-backend-13vv.onrender.com/${ID}`,
-                      {
-                          headers: {
-                              'Content-Type': 'application/json',
-                              Authorization: `Bearer ${token}`
-                          }
-                      }
-                  );
-
-                  console.log(response.data[0])
-                 return response.data[0]
+      console.log(response.data[0]);
+      return response.data[0];
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-        console.log(error)
+  }
+);
 
+export const deleteselecteddata = createAsyncThunk(
+  "deleteselecteddata",
+  async (ID) => {
+    console.log(ID);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.delete(`http://localhost:5000/notes/delete/selecteddata/${ID}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+
+      return response
+    } catch (error) {
+      console.log(error);
     }
-})
+  }
+);
+
+
+
 
 export const entry = createAsyncThunk("entry/addentry", async () => {
   try {
     const token = localStorage.getItem("token");
-    console.log(token)
-   
+    console.log(token);
 
     const response = await axios.post(
-      "https://resume-maker-backend-13vv.onrender.com/",
+      "http://localhost:5000/notes/",
       {},
       {
         headers: {
@@ -121,28 +143,24 @@ export const entry = createAsyncThunk("entry/addentry", async () => {
 export const updatedata = createAsyncThunk(
   "data/updatedata",
   async (_, { getState }) => {
-
     const state = getState().userDataSlicekey;
-    console.log(state.currentUerData);
+    console.log(state.ID);
 
     try {
       const token = localStorage.getItem("token");
 
-     
+      const response = await axios.put(
+        `http://localhost:5000/notes/${state.ID}`,
+        state.currentUerData,
 
-        const response = await axios.put(
-            `https://resume-maker-backend-13vv.onrender.com/${state.ID}`,
-            state.currentUerData.personal
-               
-            ,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-        return response
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response;
 
       // initialState.currentUerData = response.data
     } catch (error) {
@@ -166,54 +184,147 @@ const userDataSlice = createSlice({
       state.response = "";
     },
     updatePersonalData: (state, action) => {
-      const personal  = action.payload;
+      const personal = action.payload;
 
-      const fields = ['name', 'linkedin', 'contact', 'email'];
+      const fields = ["name", "linkedin", "contact", "email"];
 
       // console.log(personal)
       state.currentUerData = {
         personal: fields.reduce((acc, field) => {
           // Get the new text from personal
           const { text } = personal[field];
-          
+
           // Preserve existing formatting from state.currentUerData
-          const existingFormatting = state.currentUerData?.personal?.[field]?.formatting;
-      
+          const existingFormatting =
+            state.currentUerData?.personal?.[field]?.formatting;
+
           // Update only the text, and keep the existing formatting unchanged
           acc[field] = {
             text: text,
-            formatting: existingFormatting
+            formatting: existingFormatting,
           };
-      
+
           return acc;
         }, {}),
-      }
-    
 
-        
-
-       
+        education: state.currentUerData.education,
+        project:state.currentUerData.project
+      };
     },
-    updateformatting:(state,action)=>{
-      const {currentInputField,FormattingButtonName} = action.payload;
+    updateEducationData: (state, action) => {
+      const { education, selected } = action.payload;
+      console.log(education + selected)
+
+      // Access the specific education item that needs to be updated
+
+      state.currentUerData.education[selected] = {
+        institutename: {
+          text: education.institutename.text,
+          formatting: education.institutename.formatting,
+        },
+        yearofgradutation: {
+          text: education.yearofgradutation.text,
+          formatting: education.yearofgradutation.formatting,
+        },
+        CourseName: {
+          text: education.CourseName.text,
+          formatting: education.CourseName.formatting,
+        },
+        degree: {
+          text: education.degree.text,
+          formatting: education.degree.formatting,
+        },
+        description: {
+          text: education.description.text,
+          formatting: education.description.formatting,
+        },
+      };
+    },
+    updateProjectData: (state, action) => {
+      const { project, selected } = action.payload;
       
-      if (state.currentUerData.personal[currentInputField].formatting[FormattingButtonName] === true) {
-        state.currentUerData.personal[currentInputField].formatting = {
-          ...state.currentUerData.personal[currentInputField].formatting,
-          [FormattingButtonName]: false
-        };
+
+      // Access the specific education item that needs to be updated
+
+      state.currentUerData.project[selected] = {
+        projectname: {
+          text: project.projectname?.text,
+          formatting: project.projectname.formatting,
+        },
+        description: {
+          text: project.description.text,
+          formatting: project.description.formatting,
+        },
+      };
+    },
+
+    updateformatting: (state, action) => {
+      const { currentInputField, FormattingButtonName, currentsection } =
+        action.payload;
+      console.log(currentsection);
+      const selected = localStorage.getItem("selecteddata");
+      if (currentsection === "personal") {
+        if (
+          state.currentUerData.personal[currentInputField].formatting[
+            FormattingButtonName
+          ] === true
+        ) {
+          state.currentUerData.personal[currentInputField].formatting = {
+            ...state.currentUerData.personal[currentInputField].formatting,
+            [FormattingButtonName]: false,
+          };
+        } else {
+          state.currentUerData.personal[currentInputField].formatting = {
+            ...state.currentUerData.personal[currentInputField].formatting,
+            [FormattingButtonName]: true,
+          };
+        }
+      } else if (currentsection === "Education") {
+        console.log(
+          state.currentUerData.education[selected][currentInputField]
+        );
+        if (
+          state.currentUerData.education[selected][currentInputField]
+            .formatting[FormattingButtonName] === true
+        ) {
+          state.currentUerData.education[selected][
+            currentInputField
+          ].formatting = {
+            ...state.currentUerData.education[selected][currentInputField]
+              .formatting,
+            [FormattingButtonName]: false,
+          };
+        } else {
+          state.currentUerData.education[selected][
+            currentInputField
+          ].formatting = {
+            ...state.currentUerData.education[selected][currentInputField]
+              .formatting,
+            [FormattingButtonName]: true,
+          };
+        }
+      } else if (currentsection === "project") {
+        if (
+          state.currentUerData.project[selected][currentInputField]
+            .formatting[FormattingButtonName] === true
+        ) {
+          state.currentUerData.project[selected][
+            currentInputField
+          ].formatting = {
+            ...state.currentUerData.project[selected][currentInputField]
+              .formatting,
+            [FormattingButtonName]: false,
+          };
+        } else {
+          state.currentUerData.project[selected][
+            currentInputField
+          ].formatting = {
+            ...state.currentUerData.project[selected][currentInputField]
+              .formatting,
+            [FormattingButtonName]: true,
+          };
+        }
       }
-      else{
-        state.currentUerData.personal[currentInputField].formatting = {
-          ...state.currentUerData.personal[currentInputField].formatting,
-          [FormattingButtonName]: true
-        };
-
-
-      }
-     
-
-
     },
     updateCurrentUserDataId: (state, action) => {
       state.currentUerData.id = action.payload;
@@ -241,23 +352,21 @@ const userDataSlice = createSlice({
         state.error = "";
       })
       .addCase(fetchselecteddata.fulfilled, (state, action) => {
-        const {_id , personal} = action.payload;
-        console.log(_id)
-        const fields = ['name', 'linkedin', 'contact', 'email'];
+        const { _id, personal, education,project } = action.payload;
+        console.log(education);
+        const fields = ["name", "linkedin", "contact", "email"];
 
         // const { name, linkedin, contact, email } = personal;
         // const { text, formatting } = name;
         // const { bold, italic, underline } = formatting;
-         
-        state.ID=_id
 
-        
+        state.ID = _id;
+
         console.log(state.currentUerData);
 
         state.error = "";
 
         state.currentUerData = {
-
           personal: fields.reduce((acc, field) => {
             const { text, formatting } = personal[field];
             acc[field] = {
@@ -270,6 +379,9 @@ const userDataSlice = createSlice({
             };
             return acc;
           }, {}),
+
+          education: education,
+          project:project
         };
       })
       .addCase(fetchselecteddata.rejected, (state, action) => {
@@ -287,6 +399,9 @@ export const {
   clearResponse,
   updateCurrentUserDataId,
   updatePersonalData,
-  updateformatting
+  updateformatting,
+  updateEducationData,
+  updateProjectData,
+  
 } = userDataSlice.actions;
 export default userDataSlice.reducer;
